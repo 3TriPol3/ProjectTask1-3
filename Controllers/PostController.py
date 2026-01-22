@@ -7,9 +7,10 @@ class PostController:
     удалить,
     показать популярные.
     '''
+
+    # Добавить пост в таблицу
     @classmethod
     def add(cls, title, content, author, created_date, views):
-        # Добавить пост в таблицу
         try:
             Post.create(
             title = title,
@@ -19,44 +20,55 @@ class PostController:
             views = views
             )
         except:
-            print("Ошибка добавления пользователя")
+            print("Ошибка добавления поста")
+
+    # Выводит список записей из таблицы БД
     @classmethod
     def get(cls):
-        # Выводит список записей из таблицы БД
         return Post.select()
 
+    # Изменить название по id
     @classmethod
     def update_title(cls, id, title):
-        # Обновить запись по id
         Post.update({Post.title:title}).where(Post.id == id).execute()
 
+    # Редактирование
     @classmethod
     def update_all(cls, id, **kwargs):
         Post.update(**kwargs).where(Post.id == id).execute()
+
+    # Удалить пост по - id
+    @classmethod
+    def delete(cls, id):
+        Post.delete_by_id(id)
 
     @classmethod
     def search_views(cls,views):
         request = Post.select().where(Post.views == views) # Переменной передаём список записей у которых в поле views есть views из аргумента метода
         return request
 
+    # Поиск самых популярных постов
     @classmethod
-    def delete(cls, id):
-        # Удалить пост по - id
-        Post.delete_by_id(id)
+    def popular_posts(cls, views):
+        return Post.select().where(Post.views >= views)
+
 
 if __name__ == "__main__":
-    PostController.add(
-        title="Новости Python",
-        content="Последние новости...",
-        author="Разработчик",
-        created_date="2024-03-02",
-        views=42
-    )
-    # PostController.update_title(2,'Блог о python')
-    # PostController.update_all(1, author='Максим')
+    # PostController.add(   # Добавить пост в таблицу
+    #     title="Мой 7 пост",
+    #     content="Содержание 7",
+    #     author="Пользователь 7",
+    #     created_date="2020-01-01",
+    #     views=9
+    # )
 
-    for item in PostController.get():
-        print(item.name, item.name)
+    # PostController.update_title(2,'Блог о python') # Изменить название по id
+    # PostController.update_all(1, author='Максим') # Редактирование
 
-    print(PostController.search_views(""))
-    # PostController.delete(2)
+    # for item in PostController.get():  # Выводит список записей из таблицы БД
+    #     print(item.title, item.content, item.author, item.created_date, item.views)
+
+    # PostController.delete(4) # Удалить пост по - id
+
+    for element in PostController.popular_posts(50): # Поиск самых популярных постов
+        print(element.id, element.title, element.content, element.author, element.created_date, element.views)
