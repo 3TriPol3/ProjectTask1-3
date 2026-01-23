@@ -29,8 +29,8 @@ class PostController:
 
     # Изменить название по id
     @classmethod
-    def update_title(cls, id, title):
-        Post.update({Post.title:title}).where(Post.id == id).execute()
+    def update_content(cls, id, content):
+        Post.update({Post.content:content}).where(Post.id == id).execute()
 
     # Редактирование
     @classmethod
@@ -50,7 +50,12 @@ class PostController:
     # Поиск самых популярных постов
     @classmethod
     def popular_posts(cls, views):
-        return Post.select().where(Post.views >= views)
+        return PostController.sort(key=None, reverse=False)
+
+    # Сортировка
+    @classmethod
+    def sort(cls, key, reverse):
+        pass
 
 
 if __name__ == "__main__":

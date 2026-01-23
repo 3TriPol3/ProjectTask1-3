@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 from Controllers.PostController import *
+from Views.EditView import EditView
+
 
 class PostView(Tk):
     def __init__(self):
@@ -80,7 +82,7 @@ class PostView(Tk):
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пользователя", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
-        # Фрейм Вывод Пользователей
+        # Фрейм Вывод Постов
         self.get_data = ttk.Frame(
             self,
             relief="raised",
@@ -95,49 +97,51 @@ class PostView(Tk):
         self.table_data = ttk.Treeview(self.get_data, columns=self.columns, show='headings')
         # Заголовки
         self.table_data.heading('id', text="№")
-        self.table_data.heading('name', text='Название')
-        self.table_data.heading('email', text='Содержание')
-        self.table_data.heading('age', text='Автор')
-        self.table_data.heading('registration_date', text='Дата создания')
+        self.table_data.heading('title', text='Название')
+        self.table_data.heading('content', text='Содержание')
+        self.table_data.heading('author', text='Автор')
+        self.table_data.heading('created_date', text='Дата создания')
         self.table_data.heading('views', text='Количество просмотров')
         # Превращает объекты из БД в список кортежей для таблицы
         self.table()
-        # Фрейм для окна поиска по email
-        self.search_frame = ttk.Frame(
+        # Фрейм для редактирования поста
+        self.edit_frame = ttk.Frame(
             self,
             relief=SOLID,
             borderwidth=1,
             padding=[8, 10]
         )
-        self.search_frame.pack(
+        self.edit_frame.pack(
             fill=X,  # заполнение
             padx=10,  # расположение по оси x от верней левой точки окна
             pady=10,
         )
-        self.label_search = ttk.Label(self.search_frame, text="Найти Пользователя по email")
-        self.label_search.grid(row=0)
-        self.text_search = Text(self.search_frame, height=5, width=50)
-        self.text_search.grid(row=1, column=0)
-        self.button_search = ttk.Button(self.search_frame, text="Найти Пользователя", command=self.search)
-        self.button_search.grid(row=1, column=2, padx=5, sticky="s")
+        self.label_edit = ttk.Label(self.edit_frame, text="Редактировать содержание")
+        self.label_edit.grid(row=0)
+        self.text_edit = Text(self.edit_frame, height=5, width=50)
+        self.text_edit.grid(row=1, column=0)
+        self.button_edit = ttk.Button(self.edit_frame, text="Редактировать пост", command=self.edit)
+        self.button_edit.grid(row=1, column=2, padx=5, sticky="s")
 
-        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.search)
+        # Кнопка перехода в окно удаления постов
+        self.delete_frame = ttk.Frame(self, padding=[20])
+        self.delete_frame.pack(anchor=CENTER, padx=10, pady=10)
+
+        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.edit)
         self.button_delete.grid(row=1, column=2, padx=5, sticky="s")
 
+        # Кнопка перехода в окно редактирования поста
+        self.update_item = ttk.Button(self, text="Редактировать пост", command=self.edit)
+        self.update_item.pack()
 
 
-
-
-
-
-
-
-
- # метод передачи значения из строки ввода text_search в окно SaerchView
-    def search(self):
-        self.string = self.text_search.get("0.0", "end")  # передачи значения из строки ввода text_search
+    def edit(self):
+        window = EditView()
+ # метод передачи значения из строки ввода text_edit в окно EditView
+    def edit(self):
+        self.string = self.text_edit.get("0.0", "end")  # передачи значения из строки ввода text_edit
         self.string = self.string.strip()
-        window = SaerchView(search_string=self.string)
+        window = EditView(edit_string=self.string)
         self.destroy()
 
     # Для обновления данных в таблице создал метод добавления записей из БД
@@ -149,7 +153,7 @@ class PostView(Tk):
         self.elemnt = []
         for el in PostController.get():
             self.elemnt.append(
-                (el.id, el.name, el.email, el.age, el.registration_date)
+                (el.id, el.title, el.content, el.author, el.created_date)
             )
 
         # Вывод данных из БД в таблицу
@@ -159,15 +163,18 @@ class PostView(Tk):
 
     # Методы для кнопок
     def add_data(self):
-        self.name = self.add_name.get()
-        self.email = self.add_email.get()
-        self.age = self.add_age.get()
-        self.registration_date = self.add_registration_date.get()
+        self.title = self.add_title.get()
+        self.content = self.add_content.get()
+        self.author = self.add_author.get()
+        self.created_date = self.add_created_date.get()
+        self.views = self.add_views.get()
         PostController.add(
-            self.name,
-            self.email,
-            self.age,
-            self.registration_date
+            self.title,
+            self.content,
+            self.author,
+            self.created_date,
+            self.views
+
         )
         # Обновить данные таблицы Treeview
         self.table()
@@ -180,10 +187,11 @@ class PostView(Tk):
 
         :return:
         '''
-        self.add_name.delete(0, END)  # c 0-го идекса до конца
-        self.add_email.delete(0, END)  # c 0-го идекса до конца
-        self.add_age.delete(0, END)  # c 0-го идекса до конца
-        self.add_registration_date.delete(0, END)  # c 0-го идекса до конца
+        self.add_title.delete(0, END)  # c 0-го идекса до конца
+        self.add_content.delete(0, END)  # c 0-го идекса до конца
+        self.add_author.delete(0, END)  # c 0-го идекса до конца
+        self.add_created_date.delete(0, END)  # c 0-го идекса до конца
+        self.add_views.delete(0, END)  # c 0-го идекса до конца
 
 
 if __name__ == "__main__":
