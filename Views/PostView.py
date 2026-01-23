@@ -34,7 +34,7 @@ class PostView(Tk):
                                   padx=10,
                                   pady=10,
                                   )
-        self.add_title = ttk.Label(self.add_title_frame, text="Добавить Пользователя")
+        self.add_title = ttk.Label(self.add_title_frame, text="Добавить пост")
         self.add_title.pack()
         # Фрейм в котором расположены окна ввода данных о Посте (Находится внутри фрейма add_frame)
         self.add_input_frame = ttk.Frame(self.add_frame,
@@ -79,7 +79,7 @@ class PostView(Tk):
         self.add_views.grid(row=1, column=4, sticky="nsew", padx=5, pady=5)
 
 
-        self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пользователя", command=self.add_data)
+        self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
         # Фрейм Вывод Постов
