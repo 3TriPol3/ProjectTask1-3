@@ -5,10 +5,8 @@ from Controllers.PostController import *
 
 
 class EditView(Tk):
-    def __init__(self, edit_string):
+    def __init__(self):
         super().__init__()
-
-        self.edit_string = edit_string
 
         # Атрибуты окна
         self.title("Редактирование содержания поста")
@@ -24,7 +22,7 @@ class EditView(Tk):
         self.table_frame = ttk.Frame(self, padding=[20])
         self.table_frame.pack(anchor=CENTER, pady=10, padx=10)
         # Таблица
-        self.columns = ('id', "name", 'rarity', 'player', 'quantity', 'stats')  # Столбцы
+        self.columns = ('id', "title", 'content', 'author', 'created_date', 'views')  # Столбцы
         self.table_data = ttk.Treeview(self.table_frame, columns=self.columns, show='headings')
         # Заголовки
         self.table_data.heading('id', text="№")
@@ -49,8 +47,14 @@ class EditView(Tk):
         self.edit_button = ttk.Button(self.edit_frame,text="Редактировать", command=self.update_edit)
         self.edit_button.grid(row=1,column=1, padx=15)
 
-        # Для обновления данных в таблице создал метод добавления записей из БД
+        # Кнопка закрытия окна / перехода в главное
+        # переход на главное окно
+        self.button_move = ttk.Button(self, text="Вернуться на главную страницу", command=self.move)
+        self.button_move.pack(anchor=CENTER)
 
+
+
+    # Для обновления данных в таблице создал метод добавления записей из БД
     def table(self):
         # Очистить старые записи
         for item in self.table_data.get_children():
@@ -94,6 +98,11 @@ class EditView(Tk):
         '''
         PostController.update_content(id = self.id, content=self.edit_entry.get())
         self.table()
+
+    def move(self):
+        from Views.PostView import PostView
+        window_home = PostView()
+        self.destroy()
 
 if __name__ == "__main__":
     win = EditView()

@@ -89,8 +89,8 @@ class DeleteView(Tk):
         self.destroy()
 
 if __name__ == "__main__":
-    win = DeleteView()
-    win.mainloop()
+    window = DeleteView()
+    window.mainloop()
 
 
 

@@ -75,5 +75,4 @@ if __name__ == "__main__":
 
     # PostController.delete(4) # Удалить пост по - id
 
-    for element in PostController.popular_posts(50): # Поиск самых популярных постов
-        print(element.id, element.title, element.content, element.author, element.created_date, element.views)
+    print(PostController.sort(None, False))

@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
+
 from Controllers.PostController import *
+from Views.DeleteView import DeleteView
 from Views.EditView import EditView
 
 
@@ -116,33 +118,24 @@ class PostView(Tk):
             padx=10,  # расположение по оси x от верней левой точки окна
             pady=10,
         )
-        self.label_edit = ttk.Label(self.edit_frame, text="Редактировать содержание")
-        self.label_edit.grid(row=0)
-        self.text_edit = Text(self.edit_frame, height=5, width=50)
-        self.text_edit.grid(row=1, column=0)
-        self.button_edit = ttk.Button(self.edit_frame, text="Редактировать пост", command=self.edit)
-        self.button_edit.grid(row=1, column=2, padx=5, sticky="s")
 
         # Кнопка перехода в окно удаления постов
         self.delete_frame = ttk.Frame(self, padding=[20])
         self.delete_frame.pack(anchor=CENTER, padx=10, pady=10)
 
-        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.edit)
+        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.delete)
         self.button_delete.grid(row=1, column=2, padx=5, sticky="s")
 
         # Кнопка перехода в окно редактирования поста
-        self.update_item = ttk.Button(self, text="Редактировать пост", command=self.edit)
-        self.update_item.pack()
+        self.update_content = ttk.Button(self, text="Редактировать пост", command=self.edit)
+        self.update_content.pack()
 
+
+    def delete(self):
+        window = DeleteView()
 
     def edit(self):
         window = EditView()
- # метод передачи значения из строки ввода text_edit в окно EditView
-    def edit(self):
-        self.string = self.text_edit.get("0.0", "end")  # передачи значения из строки ввода text_edit
-        self.string = self.string.strip()
-        window = EditView(edit_string=self.string)
-        self.destroy()
 
     # Для обновления данных в таблице создал метод добавления записей из БД
     def table(self):
@@ -184,7 +177,6 @@ class PostView(Tk):
     def clear(self):
         '''
         Метод очистит окна Treeview
-
         :return:
         '''
         self.add_title.delete(0, END)  # c 0-го идекса до конца
