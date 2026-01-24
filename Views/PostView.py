@@ -109,6 +109,8 @@ class PostView(Tk):
         self.table_data.heading('views', text='Количество просмотров')
         # Превращает объекты из БД в список кортежей для таблицы
         self.table()
+        # Для события выбора строки из таблицы вызову метод row_selected
+        self.table_data.bind("<<TreeviewSelect>>", self.row_selected)
         # Фрейм для редактирования поста
         self.edit_frame = ttk.Frame(
             self,
@@ -149,7 +151,7 @@ class PostView(Tk):
         self.elemnt = []
         for el in PostController.get():
             self.elemnt.append(
-                (el.id, el.title, el.content, el.author, el.created_date)
+                (el.id, el.title, el.content, el.author, el.created_date, el.views)
             )
 
         # Вывод данных из БД в таблицу
@@ -187,6 +189,15 @@ class PostView(Tk):
         self.add_author.delete(0, END)  # c 0-го идекса до конца
         self.add_created_date.delete(0, END)  # c 0-го идекса до конца
         self.add_views.delete(0, END)  # c 0-го идекса до конца
+
+    def row_selected(self, event):
+        selected = self.table_data.selection()
+        # Проверить, если строки не выбранны
+        if not selected:
+            return  # Завершить работу метода
+        self.row = self.table_data.selection()[0]
+        self.id = self.table_data.item(self.row, "values")[0]
+        return self.id
 
 
 if __name__ == "__main__":
