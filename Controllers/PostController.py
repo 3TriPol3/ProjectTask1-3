@@ -48,14 +48,14 @@ class PostController:
         return request
 
     # Поиск самых популярных постов
-    @classmethod
-    def popular_posts(cls, views):
-        return PostController.sort(key=None, reverse=False)
-
     # Сортировка
+    # @classmethod
+    # def sorted(cls):
+    #     Post.select().order_by(Post.views)
+
     @classmethod
-    def sort(cls, key, reverse):
-        pass
+    def sorted(cls, limit=10):
+        return Post.select().order_by(Post.views.desc()).limit(limit)
 
 
 if __name__ == "__main__":
@@ -75,4 +75,8 @@ if __name__ == "__main__":
 
     # PostController.delete(4) # Удалить пост по - id
 
-    print(PostController.sort(None, False))
+
+    # Получение топ-10 по views (убывание)
+    top_posts = PostController.sorted(limit=10)
+    print(PostController.sorted(limit=10))
+    print(top_posts)

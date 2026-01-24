@@ -11,5 +11,6 @@ class Post(BaseModel):
     created_date = DateField() # Дата создания
     views = IntegerField() # Количество просмотров
 
+
 if __name__ == "__main__":
     mysql_db.create_tables([Post])
