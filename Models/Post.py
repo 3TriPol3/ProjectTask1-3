@@ -9,7 +9,7 @@ class Post(BaseModel):
     content = CharField() # Содержание
     author = CharField() # Автор
     created_date = DateField() # Дата создания
-    views = IntegerField() # Количество просмотров
+    views = CharField() # Количество просмотров
 
 
 if __name__ == "__main__":

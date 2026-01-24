@@ -94,9 +94,12 @@ class PostView(Tk):
         self.get_data.pack(
             anchor=CENTER
         )
+        # Фрейм Таблицы
+        self.table_frame = ttk.Frame(self, padding=[20])
+        self.table_frame.pack(anchor=CENTER, pady=10, padx=10)
         # Таблица
         self.columns = ('id', "title", 'content', 'author', 'created_date', 'views')  # Столбцы
-        self.table_data = ttk.Treeview(self.get_data, columns=self.columns, show='headings')
+        self.table_data = ttk.Treeview(self.table_frame, columns=self.columns, show='headings')
         # Заголовки
         self.table_data.heading('id', text="№")
         self.table_data.heading('title', text='Название')

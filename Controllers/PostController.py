@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # PostController.delete(4) # Удалить пост по - id
 
 
-    # Получение топ-10 по views (убывание)
+    # Получение популярных постов
     top_posts = PostController.sorted(limit=10)
     print(PostController.sorted(limit=10))
     print(top_posts)

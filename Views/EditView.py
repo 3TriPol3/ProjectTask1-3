@@ -18,7 +18,7 @@ class EditView(Tk):
         self.label = ttk.Label(self.label_frame, text="Редактировать содержание поста")
         self.label.pack()
 
-        # Таблица
+        # Фрейм Таблицы
         self.table_frame = ttk.Frame(self, padding=[20])
         self.table_frame.pack(anchor=CENTER, pady=10, padx=10)
         # Таблица
