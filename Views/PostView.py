@@ -84,7 +84,7 @@ class PostView(Tk):
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
-        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать самые популярные посты", command=self.sorted)
+        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные", command=self.sort)
         self.add_button_sort.grid(row=1, column=6, sticky="nsew", padx=5, pady=5)
 
         # Фрейм Вывод Постов
@@ -203,9 +203,20 @@ class PostView(Tk):
         self.id = self.table_data.item(self.row, "values")[0]
         return self.id
 
-    def sorted(cls):
-        req = Post.select().order_by(Post.views.desc())
-        return req
+
+
+
+
+    def sort(self):
+        for item in PostController.sorted():  # Выводит список записей из таблицы БД
+            print(item.title, item.content, item.author, item.created_date, item.views)
+        # Обновить данные таблицы Treeview
+        self.table()
+        # Очистить поля ввода
+        self.clear()
+
+
+
 
 
 if __name__ == "__main__":

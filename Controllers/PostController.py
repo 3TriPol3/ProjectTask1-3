@@ -51,8 +51,12 @@ class PostController:
     # Сортировка
     @classmethod
     def sorted(cls):
-        req = Post.select().order_by(Post.views.desc())
-        return req
+        try:
+            req = Post.select().order_by(Post.views.desc())
+            return req
+        except:
+            print("Ошибка сортировки постов")
+        return Post.select()
 
 
 if __name__ == "__main__":
@@ -73,6 +77,6 @@ if __name__ == "__main__":
     # PostController.delete(4) # Удалить пост по - id
 
     # Получение популярных постов
-    for item in PostController.sorted():  # Выводит список записей из таблицы БД
-        print(item.title, item.content, item.author, item.created_date, item.views)
+    for items in PostController.sorted():  # Выводит список записей из таблицы БД
+        print(items.title, items.content, items.author, items.created_date, items.views)
 
