@@ -49,13 +49,10 @@ class PostController:
 
     # Поиск самых популярных постов
     # Сортировка
-    # @classmethod
-    # def sorted(cls):
-    #     Post.select().order_by(Post.views)
-
     @classmethod
-    def sorted(cls, limit=10):
-        return Post.select().order_by(Post.views.desc()).limit(limit)
+    def sorted(cls):
+        req = Post.select().order_by(Post.views.desc())
+        return req
 
 
 if __name__ == "__main__":
@@ -75,8 +72,7 @@ if __name__ == "__main__":
 
     # PostController.delete(4) # Удалить пост по - id
 
-
     # Получение популярных постов
-    top_posts = PostController.sorted(limit=10)
-    print(PostController.sorted(limit=10))
-    print(top_posts)
+    for item in PostController.sorted():  # Выводит список записей из таблицы БД
+        print(item.title, item.content, item.author, item.created_date, item.views)
+

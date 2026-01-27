@@ -84,6 +84,9 @@ class PostView(Tk):
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
+        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать самые популярные посты", command=self.sorted)
+        self.add_button_sort.grid(row=1, column=6, sticky="nsew", padx=5, pady=5)
+
         # Фрейм Вывод Постов
         self.get_data = ttk.Frame(
             self,
@@ -124,14 +127,15 @@ class PostView(Tk):
             pady=10,
         )
 
-        # Кнопка перехода в окно удаления постов
+        # Фрейм окна удаления постов
         self.delete_frame = ttk.Frame(self, padding=[20])
         self.delete_frame.pack(anchor=CENTER, padx=10, pady=10)
 
+        # Кнопка перехода в окно удаления постов
         self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.delete)
         self.button_delete.grid(row=1, column=2, padx=5, sticky="s")
 
-        # Кнопка перехода в окно редактирования поста
+        # Кнопка перехода в окно редактирования постов
         self.update_content = ttk.Button(self, text="Редактировать пост", command=self.edit)
         self.update_content.pack()
 
@@ -198,6 +202,10 @@ class PostView(Tk):
         self.row = self.table_data.selection()[0]
         self.id = self.table_data.item(self.row, "values")[0]
         return self.id
+
+    def sorted(cls):
+        req = Post.select().order_by(Post.views.desc())
+        return req
 
 
 if __name__ == "__main__":
