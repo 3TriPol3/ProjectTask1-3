@@ -86,7 +86,7 @@ class PostView(Tk):
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
-        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные", command=self.sort)
+        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные")
         self.add_button_sort.grid(row=1, column=6, sticky="nsew", padx=5, pady=5)
 
         # Фрейм Вывод Постов
@@ -131,7 +131,6 @@ class PostView(Tk):
         # Кнопка перехода в окно редактирования постов
         self.update_content = ttk.Button(self.edit_frame, text="Редактировать пост", command=self.edit_window)
         self.update_content.grid(row=1, column=3, padx=5, sticky="s")
-
 
     def delete_window(self):
         window = DeleteView()
@@ -196,29 +195,29 @@ class PostView(Tk):
 
     # Для обновления данных в таблице создал метод добавления записей из БД
     def sort(self):
-       for item in self.table_data.get_children():
-           self.table_data.delete(item)
+       for el in self.table_data.get_children():
+           self.table_data.delete(el)
        if self.table_content == 0:
            self.mode = PostController.get()
        else:
            self.mode = PostController.sorted()
-       lst1 = []
-       for item in self.mode:
-           lst1.append(
-               (item.id, item.title, item.content, item.author, item.created_date, item.views)
+       lst = []
+       for el in self.mode:
+           lst.append(
+               (el.id, el.title, el.content, el.author, el.created_date, el.views)
            )
-       for item in lst1:
-            self.table_data.insert("", 'end', values=item)
+       for el in lst:
+            self.table_data.insert("", 'end', values=el)
 
-    def filter(self):
-       if self.table_content == 0:
-          self.table_content = 1
-          self.add_button_sort['text'] = "По умолчанию"
-          self.table()
-       else:
-          self.table_content = 0
-          self.add_button_sort['text'] = "Популярное"
-          self.table()
+    # def filter(self):
+    #    if self.table_content == 0:
+    #       self.table_content = 1
+    #       self.add_button_sort['text'] = "По умолчанию"
+    #       self.table()
+    #    else:
+    #       self.table_content = 0
+    #       self.add_button_sort['text'] = "Популярное"
+    #       self.table()
 
 
 if __name__ == "__main__":
