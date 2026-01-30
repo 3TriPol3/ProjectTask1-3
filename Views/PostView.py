@@ -22,22 +22,11 @@ class PostView(Tk):
                                    relief=SOLID,
                                    padding=[18], # внутренние отступы фрейма
         )
-        self.add_frame.pack(
-            anchor=CENTER,
-            fill=X,
-            padx=10,
-            pady=10,
-        )
+        self.add_frame.pack(anchor=CENTER, fill=X, padx=10, pady=10)
         #Фрейм, в котором расположен текст Добавить Пост (Находится внутри фрейма add_frame)
-        self.add_title_frame = ttk.Frame(self.add_frame,
-                                         relief=SOLID,
-                                         borderwidth=1,
-                                         padding=[8, 10])
-        self.add_title_frame.pack(anchor=CENTER,
-                                  fill=X,
-                                  padx=10,
-                                  pady=10,
-                                  )
+        self.add_title_frame = ttk.Frame(self.add_frame, relief=SOLID, borderwidth=1, padding=[8, 10])
+        self.add_title_frame.pack(anchor=CENTER, fill=X, padx=10, pady=10,)
+
         self.add_title = ttk.Label(self.add_title_frame, text="Добавить пост")
         self.add_title.pack()
         # Фрейм в котором расположены окна ввода данных о Посте (Находится внутри фрейма add_frame)
@@ -118,11 +107,11 @@ class PostView(Tk):
         self.table()
         # Фрейм для редактирования поста
         self.edit_frame = ttk.Frame(self, padding=[20])
-        self.edit_frame.pack(anchor=CENTER, padx=10, pady=10)
+        self.edit_frame.pack(anchor=CENTER, padx=5, pady=5)
 
         # Фрейм окна удаления постов
         self.delete_frame = ttk.Frame(self, padding=[20])
-        self.delete_frame.pack(anchor=CENTER, padx=10, pady=10)
+        self.delete_frame.pack(anchor=CENTER, padx=5, pady=5)
 
         # Кнопка перехода в окно удаления постов
         self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.delete_window)
