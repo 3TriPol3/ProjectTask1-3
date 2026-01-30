@@ -51,13 +51,7 @@ class PostController:
     # Сортировка
     @classmethod
     def sorted(cls):
-        try:
-            req = Post.select().order_by(Post.views.desc())
-            return req
-        except:
-            print("Ошибка сортировки постов")
-        return Post.select()
-
+        return Post.select().order_by(Post.views.desc())
 
 if __name__ == "__main__":
     # PostController.add(   # Добавить пост в таблицу

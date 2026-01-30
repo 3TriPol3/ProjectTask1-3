@@ -14,6 +14,8 @@ class PostView(Tk):
         self.title("Блог с постами")
         self.geometry("1280x920")
 
+        self.table_content = 0
+
         # Фрейм Добавить пост
         self.add_frame = ttk.Frame(self,
                                    borderwidth=1,
@@ -110,41 +112,34 @@ class PostView(Tk):
         self.table_data.heading('author', text='Автор')
         self.table_data.heading('created_date', text='Дата создания')
         self.table_data.heading('views', text='Количество просмотров')
-        # Превращает объекты из БД в список кортежей для таблицы
-        self.table()
         # Для события выбора строки из таблицы вызову метод row_selected
         self.table_data.bind("<<TreeviewSelect>>", self.row_selected)
+        # Превращает объекты из БД в список кортежей для таблицы
+        self.table()
         # Фрейм для редактирования поста
-        self.edit_frame = ttk.Frame(
-            self,
-            relief=SOLID,
-            borderwidth=1,
-            padding=[8, 10]
-        )
-        self.edit_frame.pack(
-            fill=X,  # заполнение
-            padx=10,  # расположение по оси x от верней левой точки окна
-            pady=10,
-        )
+        self.edit_frame = ttk.Frame(self, padding=[20])
+        self.edit_frame.pack(anchor=CENTER, padx=10, pady=10)
 
         # Фрейм окна удаления постов
         self.delete_frame = ttk.Frame(self, padding=[20])
         self.delete_frame.pack(anchor=CENTER, padx=10, pady=10)
 
         # Кнопка перехода в окно удаления постов
-        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.delete)
+        self.button_delete = ttk.Button(self.delete_frame, text="Удаление постов", command=self.delete_window)
         self.button_delete.grid(row=1, column=2, padx=5, sticky="s")
 
         # Кнопка перехода в окно редактирования постов
-        self.update_content = ttk.Button(self, text="Редактировать пост", command=self.edit)
-        self.update_content.pack()
+        self.update_content = ttk.Button(self.edit_frame, text="Редактировать пост", command=self.edit_window)
+        self.update_content.grid(row=1, column=3, padx=5, sticky="s")
 
 
-    def delete(self):
+    def delete_window(self):
         window = DeleteView()
+        self.destroy()
 
-    def edit(self):
+    def edit_window(self):
         window = EditView()
+        self.destroy()
 
     # Для обновления данных в таблице создал метод добавления записей из БД
     def table(self):
@@ -154,16 +149,12 @@ class PostView(Tk):
 
         self.elemnt = []
         for el in PostController.get():
-            self.elemnt.append(
-                (el.id, el.title, el.content, el.author, el.created_date, el.views)
-            )
-
+            self.elemnt.append((el.id, el.title, el.content, el.author, el.created_date, el.views))
         # Вывод данных из БД в таблицу
         for item in self.elemnt:
             self.table_data.insert("", END, values=item)
         self.table_data.pack()
 
-    # Методы для кнопок
     def add_data(self):
         self.title = self.add_title.get()
         self.content = self.add_content.get()
@@ -203,20 +194,31 @@ class PostView(Tk):
         self.id = self.table_data.item(self.row, "values")[0]
         return self.id
 
-
-
-
-
+    # Для обновления данных в таблице создал метод добавления записей из БД
     def sort(self):
-        for item in PostController.sorted():  # Выводит список записей из таблицы БД
-            print(item.title, item.content, item.author, item.created_date, item.views)
-        # Обновить данные таблицы Treeview
-        self.table()
-        # Очистить поля ввода
-        self.clear()
+       for item in self.table_data.get_children():
+           self.table_data.delete(item)
+       if self.table_content == 0:
+           self.mode = PostController.get()
+       else:
+           self.mode = PostController.sorted()
+       lst1 = []
+       for item in self.mode:
+           lst1.append(
+               (item.id, item.title, item.content, item.author, item.created_date, item.views)
+           )
+       for item in lst1:
+            self.table_data.insert("", 'end', values=item)
 
-
-
+    def filter(self):
+       if self.table_content == 0:
+          self.table_content = 1
+          self.add_button_sort['text'] = "По умолчанию"
+          self.table()
+       else:
+          self.table_content = 0
+          self.add_button_sort['text'] = "Популярное"
+          self.table()
 
 
 if __name__ == "__main__":
