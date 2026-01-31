@@ -9,7 +9,7 @@ class SortView(Tk):
         super().__init__()
 
         # Атрибуты окна
-        self.title("Блог с постами")
+        self.title("Самые популярные посты")
         self.geometry("1280x920")
 
         self.table_content = 0
@@ -17,7 +17,7 @@ class SortView(Tk):
         self.label_frame = ttk.Frame(self, padding=[20])
         self.label_frame.pack(anchor=CENTER, pady=10, padx=10)
 
-        self.label = ttk.Label(self.label_frame, text="Удалить пост")
+        self.label = ttk.Label(self.label_frame, text="Показать популярные посты")
         self.label.pack()
 
         # Фрейм Таблицы
@@ -41,7 +41,7 @@ class SortView(Tk):
         self.sort_frame = ttk.Frame(self, padding=[20])
         self.sort_frame.pack(anchor=CENTER, padx=10, pady=10)
 
-        self.sort_button = ttk.Button(self.sort_frame, text="Удалить Пост", command=self.sort)
+        self.sort_button = ttk.Button(self.sort_frame, text="Показать самые популярные", command=self.filter)
         self.sort_button.grid(row=1, column=1, padx=15)
 
         # Кнопка закрытия окна / перехода в главное
@@ -66,6 +66,21 @@ class SortView(Tk):
         for el in lst:
             self.table_data.insert("", END, values=el)
 
+        # Для обновления данных в таблице создал метод добавления записей из БД
+
+    def table(self):
+        # Очистить старые записи
+        for item in self.table_data.get_children():
+            self.table_data.delete(item)
+
+        self.elemnt = []
+        for el in PostController.get():
+            self.elemnt.append((el.id, el.title, el.content, el.author, el.created_date, el.views))
+        # Вывод данных из БД в таблицу
+        for item in self.elemnt:
+            self.table_data.insert("", END, values=item)
+        self.table_data.pack()
+
 
     def filter(self):
         if self.table_content == 0:
@@ -74,7 +89,7 @@ class SortView(Tk):
             self.table()
         else:
             self.table_content = 0
-            self.sort_button['text'] = "Показать популярное"
+            self.sort_button['text'] = "Показать самые популярные"
             self.table()
 
     def row_selected(self, event):
