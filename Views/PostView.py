@@ -4,6 +4,7 @@ from tkinter import ttk
 from Controllers.PostController import *
 from Views.DeleteView import DeleteView
 from Views.EditView import EditView
+from Views.SortView import SortView
 
 
 class PostView(Tk):
@@ -13,8 +14,6 @@ class PostView(Tk):
         # Атрибуты окна
         self.title("Блог с постами")
         self.geometry("1280x920")
-
-        self.table_content = 0
 
         # Фрейм Добавить пост
         self.add_frame = ttk.Frame(self, borderwidth=1, relief=SOLID, padding=[18], # внутренние отступы фрейма
@@ -68,25 +67,21 @@ class PostView(Tk):
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
 
-        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные", command=self.sort)
+        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные", command=self.sort_button)
         self.add_button_sort.grid(row=1, column=6, sticky="nsew", padx=5, pady=5)
 
         # Фрейм Вывод Постов
-        self.get_data = ttk.Frame(
-            self,
-            relief="raised",
-            borderwidth=3,
-            padding=[5]
-        )
-        self.get_data.pack(
-            anchor=CENTER
-        )
+        self.get_data = ttk.Frame(self, relief="raised", borderwidth=3, padding=[5])
+        self.get_data.pack(anchor=CENTER)
+
         # Фрейм Таблицы
         self.table_frame = ttk.Frame(self, padding=[20])
         self.table_frame.pack(anchor=CENTER, pady=10, padx=10)
+
         # Таблица
         self.columns = ('id', "title", 'content', 'author', 'created_date', 'views')  # Столбцы
         self.table_data = ttk.Treeview(self.table_frame, columns=self.columns, show='headings')
+
         # Заголовки
         self.table_data.heading('id', text="№")
         self.table_data.heading('title', text='Название')
@@ -98,6 +93,7 @@ class PostView(Tk):
         self.table_data.bind("<<TreeviewSelect>>", self.row_selected)
         # Превращает объекты из БД в список кортежей для таблицы
         self.table()
+
         # Фрейм для редактирования поста
         self.edit_frame = ttk.Frame(self, padding=[20])
         self.edit_frame.pack(anchor=CENTER, padx=5, pady=5)
@@ -120,6 +116,10 @@ class PostView(Tk):
 
     def edit_window(self):
         window = EditView()
+        self.destroy()
+
+    def sort_button(self):
+        window = SortView()
         self.destroy()
 
     # Для обновления данных в таблице создал метод добавления записей из БД
@@ -173,33 +173,6 @@ class PostView(Tk):
         self.row = self.table_data.selection()[0]
         self.id = self.table_data.item(self.row, "values")[0]
         return self.id
-
-    # Для обновления данных в таблице создал метод добавления записей из БД
-    def sort(self):
-       # for el in self.table_data.get_children():
-       #     self.table_data.delete(el)
-       if self.table_content == 0:
-           self.mode = PostController.get()
-       else:
-           self.mode = PostController.sorted()
-       lst = []
-       for el in self.mode:
-           lst.append(
-               (el.id, el.title, el.content, el.author, el.created_date, el.views)
-           )
-       for el in lst:
-            self.table_data.insert("", END, values=el)
-
-
-    # def filter(self):
-    #    if self.table_content == 0:
-    #       self.table_content = 1
-    #       self.add_button_sort['text'] = "По умолчанию"
-    #       self.table()
-    #    else:
-    #       self.table_content = 0
-    #       self.add_button_sort['text'] = "Показать популярное"
-    #       self.table()
 
 
 if __name__ == "__main__":
