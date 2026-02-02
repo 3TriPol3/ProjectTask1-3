@@ -61,15 +61,19 @@ class SortView(Tk):
             else:
                 posts = PostController.get()  # Без сортировки
 
-            # for el in posts:
-            #     self.table_data.insert("", END, values=(
-            #         el.id,
-            #         el.title,
-            #         el.content,
-            #         el.author,
-            #         el.created_date,
-            #         el.views
-            #     ))
+            for el in posts:
+                self.table_data.insert("", END, values=(
+                    el.id,
+                    el.title,
+                    el.content,
+                    el.author,
+                    el.created_date,
+                    el.views
+                ))
+        # except Exception as e:
+        #     from tkinter.messagebox import showerror
+        #     showerror("Ошибка", f"Не удалось загрузить данные: {e}")
+
 
     def toggle_sort(self):
         self.is_sorted = not self.is_sorted
