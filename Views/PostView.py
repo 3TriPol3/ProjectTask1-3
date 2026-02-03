@@ -63,12 +63,9 @@ class PostView(Tk):
         self.add_views = ttk.Entry(self.add_input_frame)
         self.add_views.grid(row=1, column=4, sticky="nsew", padx=5, pady=5)
 
-
+        # Кнопка добавления поста
         self.add_button = ttk.Button(self.add_input_frame, text="Добавить Пост", command=self.add_data)
         self.add_button.grid(row=1, column=5, sticky="nsew", padx=5, pady=5)
-
-        self.add_button_sort = ttk.Button(self.add_input_frame, text="Показать популярные", command=self.sort_button)
-        self.add_button_sort.grid(row=1, column=6, sticky="nsew", padx=5, pady=5)
 
         # Фрейм Вывод Постов
         self.get_data = ttk.Frame(self, relief="raised", borderwidth=3, padding=[5])
@@ -110,6 +107,10 @@ class PostView(Tk):
         self.update_content = ttk.Button(self.edit_frame, text="Редактировать пост", command=self.edit_window)
         self.update_content.grid(row=1, column=3, padx=5, sticky="s")
 
+        # Кнопка перехода в окно сортировки постов
+        self.update_content = ttk.Button(self.edit_frame, text="Сортировка постов", command=self.sort_window)
+        self.update_content.grid(row=1, column=4, padx=5, sticky="s")
+
     def delete_window(self):
         window = DeleteView()
         self.destroy()
@@ -118,7 +119,7 @@ class PostView(Tk):
         window = EditView()
         self.destroy()
 
-    def sort_button(self):
+    def sort_window(self):
         window = SortView()
         self.destroy()
 
