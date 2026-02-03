@@ -39,20 +39,26 @@ class EditView(Tk):
         self.edit_frame = ttk.Frame(self,padding=[20])
         self.edit_frame.pack(anchor=CENTER, padx=10,pady=10)
 
-        self.edit_label = ttk.Label(self.edit_frame,text="Содержание поста")
-        self.edit_label.grid(row=0, column=0)
-        self.edit_entry = ttk.Entry(self.edit_frame)
-        self.edit_entry.grid(row=1,column=0)
+        self.edit_title_label = ttk.Label(self.edit_frame, text="Название поста")
+        self.edit_title_label.grid(row=1, column=0)
+        self.edit_title_entry = ttk.Entry(self.edit_frame)
+        self.edit_title_entry.grid(row=2, column=0)
 
-        self.edit_button = ttk.Button(self.edit_frame,text="Редактировать", command=self.update_edit)
-        self.edit_button.grid(row=1,column=1, padx=15)
+        self.edit_title_button = ttk.Button(self.edit_frame, text="Редактировать", command=self.update_titl)
+        self.edit_title_button.grid(row=2, column=2, padx=15)
+
+        self.edit_content_label = ttk.Label(self.edit_frame,text="Содержание поста")
+        self.edit_content_label.grid(row=3, column=0)
+        self.edit_content_entry = ttk.Entry(self.edit_frame)
+        self.edit_content_entry.grid(row=4,column=0)
+
+        self.edit_title_button = ttk.Button(self.edit_frame, text="Редактировать", command=self.update_cont)
+        self.edit_title_button.grid(row=4, column=2, padx=15)
 
         # Кнопка закрытия окна / перехода в главное
         # переход на главное окно
         self.button_move = ttk.Button(self, text="Вернуться на главную страницу", command=self.move)
         self.button_move.pack(anchor=CENTER)
-
-
 
     # Для обновления данных в таблице создал метод добавления записей из БД
     def table(self):
@@ -88,15 +94,13 @@ class EditView(Tk):
 
         self.id = self.table_data.item(self.row, "values")[0]
         return self.id
-    def update_edit(self):
-        '''
-        Из метода row_selected получает id предмета
-        получает имя игрока
-        С помощью метода update_content из PostController меняет содержание поста в записи таблицы БД
-        и обновляет таблицу с помощью метода table()
-        :return:
-        '''
-        PostController.update_content(id = self.id, content=self.edit_entry.get())
+
+    def update_cont(self):
+        PostController.update_content(id = self.id, content=self.edit_content_entry.get())
+        self.table()
+
+    def update_titl(self):
+        PostController.update_title(id=self.id, title=self.edit_title_entry.get())
         self.table()
 
     def move(self):

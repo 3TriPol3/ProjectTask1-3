@@ -27,10 +27,15 @@ class PostController:
     def get(cls):
         return Post.select()
 
-    # Изменить название по id
+    # Изменить содержание по id
     @classmethod
     def update_content(cls, id, content):
         Post.update({Post.content:content}).where(Post.id == id).execute()
+
+    # Изменить название по id
+    @classmethod
+    def update_title(cls, id, title):
+        Post.update({Post.title:title}).where(Post.id == id).execute()
 
     # Редактирование
     @classmethod
